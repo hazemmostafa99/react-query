@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
-import useGetPosts from "../hooks/useGetPosts";
+import useGetPosts, { fetchPosts } from "../hooks/useGetPosts";
 import { IPost, PostStatusType } from "../types";
 import useSearch from "../hooks/useSearch";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PostsListProps = {
   selectedFiter: PostStatusType;
@@ -10,6 +12,7 @@ type PostsListProps = {
 };
 
 function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
+  const [paginate, setPaginate] = useState(1);
   const {
     data: posts = [],
     isLoading,
@@ -17,7 +20,7 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
     error,
     isStale,
     refetch,
-  } = useGetPosts(selectedFiter);
+  } = useGetPosts(selectedFiter, paginate);
 
   const {
     data: searchData = [],
@@ -25,6 +28,19 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
     isError: isSearchError,
     error: searschError,
   } = useSearch(searchQuery);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const nextPage = paginate + 1;
+    if (nextPage <= 3) {
+      queryClient.prefetchQuery({
+        queryKey: ["posts", { selectedStatus: "all", paginate: nextPage }],
+        queryFn: () => fetchPosts("all", nextPage),
+        staleTime: 1000 * 60,
+      });
+    }
+  }, [paginate, queryClient]);
 
   if (isLoading || isSearchLoading) {
     return <p> please wait...</p>;
@@ -36,12 +52,22 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
     return <p> {searschError.message}</p>;
   }
 
-  const renderList = (postsData: IPost[]) => {
+  const renderList = ({
+    postsData,
+    type,
+    key,
+  }: {
+    postsData: IPost[];
+    type: string;
+    key: string | number;
+  }) => {
     return postsData.map((post: IPost, idx: number) => (
       <tr>
         <td>{++idx}</td>
         <td>
-          <Link to="/info">{post.title} </Link>
+          <Link to={`/info?id=${post.id}&type=${type}&key=${key}`}>
+            {post.title}
+          </Link>
         </td>
         <td>{post.status}</td>
         <td style={{ textAlign: "center" }}>
@@ -58,7 +84,6 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
       </tr>
     ));
   };
-  console.log(isStale);
 
   return (
     <>
@@ -77,8 +102,28 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>{renderList(searchQuery ? searchData : posts)}</tbody>
+        <tbody>
+          {renderList(
+            searchQuery
+              ? { postsData: searchData, type: "search", key: searchQuery }
+              : { postsData: posts, type: "paginate", key: paginate },
+          )}
+        </tbody>
       </Table>
+
+      {!searchQuery && selectedFiter === "all" && (
+        <ButtonGroup aria-label="Basic example">
+          <Button variant="light" onClick={() => setPaginate(1)}>
+            1
+          </Button>
+          <Button variant="light" onClick={() => setPaginate(2)}>
+            2
+          </Button>
+          <Button variant="light" onClick={() => setPaginate(3)}>
+            3
+          </Button>
+        </ButtonGroup>
+      )}
     </>
   );
 }
