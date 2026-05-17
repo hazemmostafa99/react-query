@@ -1,20 +1,24 @@
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import PostsList from "../components/PostsList";
+import PostFilter from "../components/PostFilter";
+import { useState } from "react";
+import { PostStatusType } from "../types";
+import SearchQuery from "../components/SearchQuery";
 
 const Home = () => {
+  const [selectedFiter, setSelectedFilter] = useState<PostStatusType>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   return (
     <Row>
       <Col xs={9}>
-        <PostsList />
+        <PostsList selectedFiter={selectedFiter} searchQuery={searchQuery} />
       </Col>
       <Col>
-        <h5>Filter By Status</h5>
-        <Form.Select>
-          <option value="">Select Status</option>
-          <option value="Publish">Publish</option>
-          <option value="Draft">Draft</option>
-          <option value="Blocked">Blocked</option>
-        </Form.Select>
+        <SearchQuery setSearchQuery={setSearchQuery} />
+        <PostFilter
+          selectedFiter={selectedFiter}
+          setSelectedFilter={setSelectedFilter}
+        />
       </Col>
     </Row>
   );
