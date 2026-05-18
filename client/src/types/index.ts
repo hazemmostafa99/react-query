@@ -7,3 +7,13 @@ export interface IPost {
 }
 
 export type PostStatusType = "published" | "draft" | "block" | "all";
+
+export interface CommentPost {
+  body: string;
+  post_id: number;
+}
+export interface CommentType {
+  id: number;
+  body: string;
+  post_id: number;
+}

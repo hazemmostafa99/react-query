@@ -120,5 +120,88 @@
       "topRate": false
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "data": {
+        "body": "Comment 3",
+        "post_id": 1
+      },
+      "id": 1
+    },
+    {
+      "body": "Comment 3",
+      "post_id": 1,
+      "id": 2
+    },
+    {
+      "body": "Comment 2",
+      "post_id": 1,
+      "id": 3
+    },
+    {
+      "body": "Comment 1\n\n",
+      "post_id": 1,
+      "id": 4
+    },
+    {
+      "body": "c1",
+      "post_id": 3,
+      "id": 5
+    },
+    {
+      "body": "c2",
+      "post_id": 3,
+      "id": 6
+    },
+    {
+      "body": "c3",
+      "post_id": 3,
+      "id": 7
+    },
+    {
+      "body": "c1",
+      "post_id": 4,
+      "id": 8
+    },
+    {
+      "body": "efef",
+      "post_id": 4,
+      "id": 9
+    },
+    {
+      "body": "fwffw",
+      "post_id": 4,
+      "id": 10
+    },
+    {
+      "body": "wfwfwfwfwfwf",
+      "post_id": 4,
+      "id": 11
+    },
+    {
+      "body": "wdfwffwfwfwfwfw",
+      "post_id": 4,
+      "id": 12
+    },
+    {
+      "body": "dfwfwfwfw",
+      "post_id": 4,
+      "id": 13
+    },
+    {
+      "body": "wdwdwdwdd",
+      "post_id": 4,
+      "id": 14
+    },
+    {
+      "body": "zzzzz",
+      "post_id": 4,
+      "id": 15
+    },
+    {
+      "body": "ggggggggggggggggggggggggg",
+      "post_id": 4,
+      "id": 16
+    }
+  ]
 }
