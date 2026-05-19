@@ -5,6 +5,8 @@ import { IPost, PostStatusType } from "../types";
 import useSearch from "../hooks/useSearch";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import useUpdateRate from "../hooks/useUpdateRate";
+import useDeletePost from "../hooks/useDeletePost";
 
 type PostsListProps = {
   selectedFiter: PostStatusType;
@@ -28,6 +30,8 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
     isError: isSearchError,
     error: searschError,
   } = useSearch(searchQuery);
+  const updateRate = useUpdateRate();
+  const deletePost = useDeletePost();
 
   const queryClient = useQueryClient();
 
@@ -74,11 +78,21 @@ function PostsList({ selectedFiter, searchQuery }: PostsListProps) {
           <Form.Check // prettier-ignore
             type="switch"
             checked={post.topRate}
+            disabled={searchQuery.length > 0 || selectedFiter !== "all"}
+            onChange={(e) =>
+              updateRate.mutate({
+                postId: post.id,
+                rateValue: e.target.checked,
+                pageNumber: paginate,
+              })
+            }
           />
         </td>
         <td>
           <ButtonGroup aria-label="Basic example">
-            <Button variant="danger">Delete</Button>
+            <Button variant="danger" onClick={() => deletePost.mutate(post.id)}>
+              Delete
+            </Button>
           </ButtonGroup>
         </td>
       </tr>

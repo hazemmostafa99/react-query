@@ -17,3 +17,9 @@ export interface CommentType {
   body: string;
   post_id: number;
 }
+
+export interface TopRatePost {
+  postId: number;
+  rateValue: boolean;
+  pageNumber: number;
+}

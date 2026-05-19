@@ -46,9 +46,9 @@ function useAddComment(): UseMutationResult<
       };
     },
 
-    onError(_, __, rollback) {
-      if (rollback) {
-        rollback();
+    onError(_, __, rollBack) {
+      if (rollBack) {
+        rollBack();
       }
     },
 
